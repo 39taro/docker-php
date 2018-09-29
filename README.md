@@ -35,13 +35,27 @@ cp ./nginx/sites/app.conf.example ./nginx/sites/app.conf
 ```
 で設定ファイルをコピーして作って開発すると楽です。
 
-nginxのlogは./data/logs/nginx以下に吐き出されますので使ってください。
+nginxのlogは./logs/nginx以下に吐き出されますので使ってください。
 
 ### mysql
 mysqlのログイン情報はコンテナ起動時の.envに依存します。
 ログイン情報を確認しておいてください。
 また、mysqlコンテナ起動時にsqlインポートしたい場合には、
 ./mysql/docker-entrypoint-initdb.d以下に*.sqlファイルを配置してください。
+sqlはホスト：コンテナで同期してますが、volumesを使いたい場合には、
+docker-compose.ymlに
+以下を追記
+```
+volumes:
+  mysql:
+    driver: local
+```
+servicesのmysqlを以下に修正
+```
+    volumes:
+      - mysql:/var/lib/mysql
+```
+してください。
 
 ### phpmyadmin
 phpmyadminはhttp://localhost:8080でアクセスできますが、
